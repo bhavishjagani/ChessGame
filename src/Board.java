@@ -1,0 +1,79 @@
+public class Board {
+     Square board[][];
+
+    public Board() {
+        this.board = new Square[8][8];
+        for (int    i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = new Square(new EmptyPiece(' ', PieceColor.EMPTY));
+            }
+        }
+    }
+    public void initializeBoard() {
+        board[0][0].setPiece(new Rook('\u2656', PieceColor.BLACK));
+        board[0][7].setPiece(new Rook('\u2656', PieceColor.BLACK));
+        board[0][1].setPiece(new Knight('\u2658', PieceColor.BLACK));
+        board[0][6].setPiece(new Knight('\u2658', PieceColor.BLACK));
+        board[0][2].setPiece(new Bishop('\u2657', PieceColor.BLACK));
+        board[0][5].setPiece(new Bishop('\u2657', PieceColor.BLACK));
+        board[0][3].setPiece(new Queen('\u2655', PieceColor.BLACK));
+        board[0][4].setPiece(new King('\u2654', PieceColor.BLACK));
+        board[7][0].setPiece(new Rook('\u265C', PieceColor.WHITE));
+        board[7][7].setPiece(new Rook('\u265C', PieceColor.WHITE));
+        board[7][1].setPiece(new Knight('\u265E', PieceColor.WHITE));
+        board[7][6].setPiece(new Knight('\u265E', PieceColor.WHITE));
+        board[7][2].setPiece(new Bishop('\u265D', PieceColor.WHITE));
+        board[7][5].setPiece(new Bishop('\u265D', PieceColor.WHITE));
+        board[7][3].setPiece(new Queen('\u265B', PieceColor.WHITE));
+        board[7][4].setPiece(new King('\u265A', PieceColor.WHITE));
+        board[1][0].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][1].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][2].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][3].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][4].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][5].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][6].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][7].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[6][0].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][1].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][2].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][3].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][4].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][5].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][6].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][7].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+    }
+    public boolean movePiece(Piece piece, int a, int b, int x, int y) {
+        return true;
+    }
+    public void setPiece(Piece piece, int a, int b) {
+
+    }
+    public Square getPiece(int x, int y) {
+        return board[x][y];
+    }
+    public boolean hasPiece(int x, int y) {
+        if (board[x][y].equals(' ')) {
+            return true;
+        }
+        return false;
+    }
+    public void printBoard() {
+        String border = "  +-----+-------+-------+-------+-------+-------+-------+-------+";
+        for (int i = 0; i < 8; i++) {
+            System.out.println(border);
+            System.out.print(8-i + " ");
+            for (int j = 0; j < 8; j++) {
+                if (i == 0 || i == 1 || i == 6 || i == 7) {
+                    System.out.print("|\t" + board[i][j].getPiece().getSymbol() + "\t");
+                }
+                else {
+                    System.out.print("|\t" + board[i][j].getPiece().getSymbol() + "\t");
+                }
+            }
+            System.out.println("|");
+        }
+        System.out.println(border);
+        System.out.println("     a       b       c       d        e       f       g       h");
+    }
+}
