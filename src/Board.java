@@ -43,10 +43,25 @@ public class Board {
         board[6][6].setPiece(new Pawn('\u265F', PieceColor.WHITE));
         board[6][7].setPiece(new Pawn('\u265F', PieceColor.WHITE));
     }
-    public boolean movePiece(Piece piece, int a, int b, int x, int y) {
-        return true;
-    }
-    public void setPiece(Piece piece, int a, int b) {
+    public boolean movePiece(int x1, int y1, int x2, int y2) {
+        System.out.println("Attempting to move piece from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ")");
+        Piece piece = board[y1][x1].getPiece();
+        if (piece == null || piece instanceof EmptyPiece) {
+            System.out.println("No piece at the starting position (" + x1 + ", " + y1 + ")");
+            return false;
+        }
+        System.out.println("Found piece: " + piece.getClass().getSimpleName());
+        if (piece.isValidMove(x1, y1, x2, y2, this)) {
+            // Move the piece
+            board[y2][x2].setPiece(piece);
+            board[y1][x1].setPiece(new EmptyPiece(' ', PieceColor.EMPTY));
+            System.out.println("Move successful");
+            return true;
+        } else {
+            System.out.println("Invalid move for piece " + piece.getClass().getSimpleName() + " from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ")");
+        }
+        return false;
+    }    public void setPiece(Piece piece, int a, int b) {
 
     }
     public Square getPiece(int x, int y) {

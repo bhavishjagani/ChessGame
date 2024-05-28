@@ -17,6 +17,9 @@ public class Square {
         hasPiece = false;
     }
     public boolean hasPiece() {
-        return hasPiece;
+        if( !(piece instanceof EmptyPiece)){
+            return true;
+        }
+        return false;
     }
 }

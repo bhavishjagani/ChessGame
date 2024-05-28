@@ -5,27 +5,32 @@ public class Rook extends Piece {
 
     @Override
     public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
-        int direction = getColor().equals("W") ? -1 : 1;
-        if (board.board[x2][y2].getPiece().getSymbol() == ' ') {
-            int diff_x = Math.abs(x1 - x2);
-            int diff_y = Math.abs(y1 - y2);
-            if (y1 == y2 && diff_x > 0) {
-                for (int i = 0; i < diff_x; i++) {
-                    if (board.hasPiece(x2 + i, y2)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            if (x1 == x2 && diff_y > 0) {
-                for (int i = 0; i < diff_y; i++) {
-                    if (board.hasPiece(x2, y2 + i)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
+        System.out.println("Rook move validation from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ")");
+        System.out.println("Rook color: " + getColor());
+
+        if (x1 != x2 && y1 != y2) { //Ensuring if rook is moving in straight line
+            return false;
         }
+        int diff_x = Integer.signum(x2-x1); //signum, checks if difference between coordinates is positive (returns 1), negative (returns -1), or returns 0
+        int diff_y = Integer.signum(y2 - y1);//""
+
+        int x = x1 + diff_x; //Coordinates of the next square
+        int y = y1 + diff_y; //""
+
+        while (x != x2 || y != y2) { //Path Clearance Loop
+            System.out.println(x + " " + y);
+            if (board.board[y][x].hasPiece()) { //Ensuring current square is empty
+                return false;
+            }
+            x += diff_x;
+            y += diff_y;
+        }
+
+        if (! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor()) { //No piece on destination square, rook can move, OR, if piece is of opponent color, then can capture (returns true)
+            return true;
+        }
+
+        System.out.println("Invalid move: No valid conditions met");
         return false;
     }
 }
