@@ -4,8 +4,6 @@ public class Queen extends Piece{
     }
     @Override
     public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
-        System.out.println("Queen move validation from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ")");
-        System.out.println("Queen color: " + getColor());
 
         if ((x1 != x2 && y1 != y2) && (Math.abs(x2-x1) != Math.abs(y2-y1))) { //Ensuring if queen is moving in right direction
             return false;

@@ -2,11 +2,8 @@ public class Rook extends Piece {
     public Rook(char symbol, PieceColor color) {
         super(symbol, color);
     }
-
     @Override
     public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
-        System.out.println("Rook move validation from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ")");
-        System.out.println("Rook color: " + getColor());
 
         if (x1 != x2 && y1 != y2) { //Ensuring if rook is moving in straight line
             return false;

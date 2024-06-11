@@ -4,9 +4,6 @@ public class Bishop extends Piece{
     }
     @Override
     public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
-        System.out.println("Bishop move validation from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ")");
-        System.out.println("Bishop color: " + getColor());
-
         if (Math.abs(x2-x1) != Math.abs(y2-y1)) { //Checking if different between x and y coordinates are equal
             return false;
         }

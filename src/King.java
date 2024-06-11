@@ -11,5 +11,7 @@ public class King extends Piece{
         System.out.println("Invalid move: No valid conditions met");
         return false;
     }
-
+    public String toString() {
+        return getColor().toString() + " " + getSymbol();
+    }
 }
