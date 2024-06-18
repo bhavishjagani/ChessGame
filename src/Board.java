@@ -4,7 +4,7 @@ public class Board {
     public Board() {
         this.board = new Square[8][8];
         this.gameOver = false;
-        for (int    i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 board[i][j] = new Square(new EmptyPiece(' ', PieceColor.EMPTY));
             }
@@ -18,7 +18,7 @@ public class Board {
         board[0][2].setPiece(new Bishop('\u2657', PieceColor.BLACK));
         board[0][5].setPiece(new Bishop('\u2657', PieceColor.BLACK));
         board[0][3].setPiece(new Queen('\u2655', PieceColor.BLACK));
-        board[0][4].setPiece(new King('\u2654', PieceColor.BLACK));
+        board[0][4].setPiece(new King('\u2654', PieceColor.BLACK, 0, 4));
         board[7][0].setPiece(new Rook('\u265C', PieceColor.WHITE));
         board[7][7].setPiece(new Rook('\u265C', PieceColor.WHITE));
         board[7][1].setPiece(new Knight('\u265E', PieceColor.WHITE));
@@ -26,7 +26,7 @@ public class Board {
         board[7][2].setPiece(new Bishop('\u265D', PieceColor.WHITE));
         board[7][5].setPiece(new Bishop('\u265D', PieceColor.WHITE));
         board[7][3].setPiece(new Queen('\u265B', PieceColor.WHITE));
-        board[7][4].setPiece(new King('\u265A', PieceColor.WHITE));
+        board[7][4].setPiece(new King('\u265A', PieceColor.WHITE, 7, 4));
         board[1][0].setPiece(new Pawn('\u2659', PieceColor.BLACK));
         board[1][1].setPiece(new Pawn('\u2659', PieceColor.BLACK));
         board[1][2].setPiece(new Pawn('\u2659', PieceColor.BLACK));

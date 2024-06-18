@@ -27,7 +27,6 @@ public class Rook extends Piece {
             return true;
         }
 
-        System.out.println("Invalid move: No valid conditions met");
         return false;
     }
 }

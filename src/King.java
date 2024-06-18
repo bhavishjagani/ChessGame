@@ -1,6 +1,10 @@
 public class King extends Piece{
-    public King(char symbol, PieceColor color) {
+    int x;
+    int y;
+    public King(char symbol, PieceColor color, int x, int y) {
         super(symbol, color);
+        this.x = x;
+        this.y = y;
     }
     @Override
     public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
@@ -8,7 +12,6 @@ public class King extends Piece{
             return true;
         }
 
-        System.out.println("Invalid move: No valid conditions met");
         return false;
     }
     public String toString() {
