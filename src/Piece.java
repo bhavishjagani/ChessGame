@@ -6,7 +6,7 @@ public abstract class Piece{
         this.color = color;
     }
     public char getSymbol() {
-        return symbol;
+        return symbol;//
     }
     public void setSymbol(char s) {
         symbol = s;

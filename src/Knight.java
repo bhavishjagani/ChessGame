@@ -7,7 +7,7 @@ public class Knight extends Piece{
         if (((Math.abs(x2-x1) == 2 && Math.abs(y2-y1) == 1) || (Math.abs(y2-y1) == 2 && Math.abs(x2-x1) == 1)) && (! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor())) { //Checks that knight is moving correctly and checking if final coordinates are empty or has a piece and color is opposite
             return true;
         }
-
+        //
         return false;
     }
 }

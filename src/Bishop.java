@@ -26,7 +26,7 @@ public class Bishop extends Piece{
         if (! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor()) { //No piece on destination square, bishop can move, OR, if piece is of opponent color, then can capture (returns true)
             return true;
         }
-
+//
         return false;
     }
 }

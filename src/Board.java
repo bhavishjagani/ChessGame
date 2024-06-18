@@ -27,7 +27,7 @@ public class Board {
         board[7][5].setPiece(new Bishop('\u265D', PieceColor.WHITE));
         board[7][3].setPiece(new Queen('\u265B', PieceColor.WHITE));
         board[7][4].setPiece(new King('\u265A', PieceColor.WHITE, 7, 4));
-        board[1][0].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][0].setPiece(new Pawn('\u2659', PieceColor.BLACK));//
         board[1][1].setPiece(new Pawn('\u2659', PieceColor.BLACK));
         board[1][2].setPiece(new Pawn('\u2659', PieceColor.BLACK));
         board[1][3].setPiece(new Pawn('\u2659', PieceColor.BLACK));

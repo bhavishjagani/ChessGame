@@ -14,7 +14,7 @@ public class Queen extends Piece{
         int x = x1 + diff_x; //Coordinates of the next square
         int y = y1 + diff_y; //""
 
-        while (x != x2 || y != y2) { //Path Clearance Loop
+        while (x != x2 || y != y2) { //Path Clearance Loop//
             System.out.println(x + " " + y);
             if (board.board[y][x].hasPiece()) { //Ensuring current square is empty
                 return false;

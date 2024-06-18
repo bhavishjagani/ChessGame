@@ -18,7 +18,7 @@ public class Pawn extends Piece {
         if (Math.abs(x2 - x1) == 1 && y2 == y1 + direction && board.board[y2][x2].hasPiece() && board.board[y2][x2].getPiece().getColor() != getColor()) {
             return true;
         }
-
+//
         return false;
     }
 }

@@ -8,7 +8,7 @@ public class Square {
     }
 
     public Piece getPiece() {
-        return piece;
+        return piece;//
     }
     public void setPiece(Piece p) {
         piece = p;
