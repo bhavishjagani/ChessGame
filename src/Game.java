@@ -27,16 +27,16 @@ public class Game {
         return null;
     }
     public static boolean isCheck() {
-        //check
         King opponentKing = getKing();
+        System.out.println(opponentKing.toString());
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.board[i][j].hasPiece() && (board.board[i][j].getPiece().getColor() != opponentKing.getColor())) {
                     Piece piece = board.board[i][j].getPiece();
                     if (piece.isValidMove(i, j, opponentKing.x, opponentKing.y, board)) {
+                        System.out.println(piece);
                         System.out.println(opponentKing.getColor().toString() + " " + "King is in check.");
-                        System.out.println(i);
-                        System.out.println(j);
+                        System.out.println("X " + i + " Y" + j);
                         return true;
                     }
                 }
