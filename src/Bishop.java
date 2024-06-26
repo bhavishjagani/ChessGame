@@ -3,7 +3,7 @@ public class Bishop extends Piece{
         super(symbol, color);
     }
     @Override
-    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+    public boolean isValidMove(int y1, int x1, int y2, int x2, Board board) {
         if (Math.abs(x2-x1) != Math.abs(y2-y1)) { //Checking if different between x and y coordinates are equal
             return false;
         }
@@ -15,7 +15,6 @@ public class Bishop extends Piece{
         int y = y1 + diff_y; //""
 
         while (x != x2 || y != y2) { //Path Clearance Loop
-            System.out.println(x + " " + y);
             if (board.board[y][x].hasPiece()) { //Ensuring current square is empty
                 return false;
             }
@@ -23,10 +22,7 @@ public class Bishop extends Piece{
             y += diff_y;
         }
 
-        if (! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor()) { //No piece on destination square, bishop can move, OR, if piece is of opponent color, then can capture (returns true)
-            return true;
-        }
-//
-        return false;
+        //No piece on destination square, bishop can move, OR, if piece is of opponent color, then can capture (returns true)
+        return !board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor();
     }
 }

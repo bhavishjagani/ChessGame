@@ -3,11 +3,11 @@ public class Pawn extends Piece {
         super(symbol, color);
     }
     @Override
-    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+    public boolean isValidMove(int y1, int x1, int y2, int x2, Board board) {
         int direction = getColor() == PieceColor.WHITE ? -1 : 1;
         int startRow = getColor() == PieceColor.WHITE ? 6 : 1;
 
-        if (x1 == x2 && y2 == y1 + direction && ! board.board[y2][x2].hasPiece()) {
+        if (x1 == x2 && y2 == y1 + direction && !board.board[y2][x2].hasPiece()) {
             return true;
         }
 
@@ -15,10 +15,6 @@ public class Pawn extends Piece {
             return true;
         }
 
-        if (Math.abs(x2 - x1) == 1 && y2 == y1 + direction && board.board[y2][x2].hasPiece() && board.board[y2][x2].getPiece().getColor() != getColor()) {
-            return true;
-        }
-//
-        return false;
+        return Math.abs(x2 - x1) == 1 && y2 == y1 + direction && board.board[y2][x2].hasPiece() && board.board[y2][x2].getPiece().getColor() != getColor();
     }
 }
