@@ -1,62 +1,34 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 public class Game {
-    private static Board board;
-    private static boolean isWhite = true;
-    public static void move(int x1, int y1, int x2, int y2) {
-        if (board.movePiece(x1, y1, x2, y2)) {
-            isCheck();
-            if (isCheck()) {
-                if (isWhite) {
-                    System.out.println();
-                    System.out.println("Black King is in Check.");
-                }
-                else {
-                    System.out.println();
-                    System.out.println("White King is in Check.");
-                }
-                isCheckmate();
-                if (isCheckmate()) {
-                    board.gameOver = true;
-                    if (isWhite) {
-                        System.out.println("White Player Has Won The Game! Checkmate!");
-                        System.out.println();
-                    }
-                    else {
-                        System.out.println("Black Player Has Won The Game! Checkmate!");
-                        System.out.println();
-                    }
-                    System.exit(0);
-                }
-            }
-            switchPlayer();
-        }
-        else {
-            System.out.println("");
-            System.out.println("Invalid Move.");
-        }
-    }
-    public static void switchPlayer() {
-        isWhite = !isWhite;
-    }
-    public static King getKing() {
-        PieceColor currentPlayer = isWhite ? PieceColor.BLACK : PieceColor.WHITE;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board.board[i][j].getPiece().getColor() == currentPlayer && board.board[i][j].getPiece() instanceof King) {
-                    return (King) board.board[i][j].getPiece();
-                }
-            }
-        }
-        return null;
-    }
-    public static boolean isCheck() {
-        King opponentKing = getKing();
+    private Board board;
+    private PieceColor turn;
+    private Scanner scanner;
+    private List <Character> whiteCapturedPieces;
+    private List <Character> blackCapturedPieces;
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board.board[i][j].hasPiece() && (board.board[i][j].getPiece().getColor() != opponentKing.getColor())) {
-                    Piece piece = board.board[i][j].getPiece();
-                    if (piece.isValidMove(i, j, opponentKing.y, opponentKing.x, board)) {
+    public Game() {
+        board = new Board();
+        board.initializeBoard();
+        scanner = new Scanner(System.in);
+        turn = PieceColor.WHITE;
+        whiteCapturedPieces = new ArrayList<>();
+        blackCapturedPieces = new ArrayList<>();
+    }
+    private void switchTurn() {
+        turn = (turn == PieceColor.WHITE) ? PieceColor.BLACK : PieceColor.WHITE;
+    }
+    private boolean isCheck(PieceColor color) {
+        int[] kingPos = findKing(color);
+        if (kingPos == null) {
+            return false;
+        }
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = board.board[row][col].getPiece();
+                if (piece != null && piece.getColor() != color) {
+                    if (piece.isValidMove(row, col, kingPos[0], kingPos[1], board)) {
                         return true;
                     }
                 }
@@ -64,95 +36,123 @@ public class Game {
         }
         return false;
     }
-    public static List<ArrayList <Integer>> findLegalMoves(Piece piece, int pieceX, int pieceY) {
-        List<ArrayList <Integer>> coordinates = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (piece.isValidMove(pieceX, pieceY, i, j, board) && (board.board[i][j].getPiece().getColor() == board.board[pieceX][pieceY].getPiece().getColor())) {
-                    ArrayList <Integer> source = new ArrayList<>();
-                    ArrayList <Integer> destination = new ArrayList<>();
-                    source.add(pieceX);
-                    source.add(pieceY);
-                    destination.add(i);
-                    destination.add(j);
-                    coordinates.add(source);
-                    coordinates.add(destination);
-                }
-            }
+    private boolean isCheckMate(PieceColor color) {
+        if (!isCheck(color)) {
+            return false;
         }
-        return coordinates;
-    }
-    public static boolean isCheckmate() {
-        King checkedKing = getKing();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = board.board[i][j].getPiece();
-                if (piece.getColor().equals(checkedKing.getColor())) {
-                    List<ArrayList<Integer>> legalMoves = findLegalMoves(piece, i, j);
-                    int size = legalMoves.size();
-                    int index = 0;
-                    while (index < size) {
-                        int sX = legalMoves.get(index).get(0);
-                        int sY = legalMoves.get(index).get(1);
-                        int dX = legalMoves.get(index + 1).get(0);
-                        int dY = legalMoves.get(index + 1).get(1);
-                        Piece capturePiece = board.board[dY][dX].getPiece();
-                        board.board[dY][dX].setPiece(piece);
-                        board.board[sY][sX].setPiece(new EmptyPiece(' ', PieceColor.EMPTY));
-                        if (! isCheck()) {
-                            if (!(capturePiece instanceof EmptyPiece)) {
-                                board.board[sY][sX].setPiece(board.board[dY][dX].getPiece());
-                                board.board[dY][dX].setPiece(capturePiece);
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = board.board[row][col].getPiece();
+                if (piece != null && piece.getColor() == color) {
+                    for (int r = 0; r < 8; r++) {
+                        for (int c = 0; c < 8; c++) {
+                            if (piece.isValidMove(row, col, r, c, board)) {
+                                Piece originalPiece = board.board[r][c].getPiece();
+                                board.board[r][c].setPiece(piece);
+                                board.board[row][col].setPiece(new EmptyPiece(' ', PieceColor.EMPTY));
+                                if (!isCheck(color)) {
+                                    board.board[row][col].setPiece(piece);
+                                    board.board[r][c].setPiece(originalPiece);
+                                    return false;
+                                }
+                                board.board[row][col].setPiece(piece);
+                                board.board[r][c].setPiece(originalPiece);
                             }
-                            return false;
                         }
-                        index += 2;
                     }
                 }
             }
         }
         return true;
     }
-    public static void getInput() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the starting coordinates and destination coordinates in algebraic notation (a2,a4): ");
-        String coordinates = sc.next();
-        char startCoordinatesColumn = coordinates.charAt(0);
-        char startCoordinatesRow = coordinates.charAt(1);
-        char endCoordinatesColumn = coordinates.charAt(3);
-        char endCoordinatesRow = coordinates.charAt(4);
-        int x1 = ((int) startCoordinatesColumn) - 97;
-        int y1 = Math.abs(8 - (Character.getNumericValue(startCoordinatesRow)));
-
-        int x2 = ((int) endCoordinatesColumn) - 97;
-        int y2 = Math.abs(8 - (Character.getNumericValue(endCoordinatesRow)));
-
-
-        if ((isWhite && board.board[y1][x1].getPiece().getColor() == PieceColor.WHITE) || (!isWhite && board.board[y1][x1].getPiece().getColor() == PieceColor.BLACK)) {
-            move(x1, y1, x2, y2);
+    private int[] findKing(PieceColor color) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = board.board[row][col].getPiece();
+                if (piece instanceof King && piece.getColor() == color) {
+                    return new int[]{row, col};
+                }
+            }
         }
-        else {
-            if (! board.board[x1][y1].hasPiece()) {
-                System.out.println();
-                System.out.println("Square is Empty.");
+        return null;
+    }
+    private boolean move(int[] source, int[] dest) {
+        Piece piece = board.board[source[0]][source[1]].getPiece();
+        if (piece != null && piece.getColor() == turn) {
+            if (piece.isValidMove(source[0], source[1], dest[0], dest[1], board)) {
+                Piece destPiece = board.board[dest[0]][dest[1]].getPiece();
+                if (! (destPiece instanceof EmptyPiece)) {
+                    System.out.println(destPiece.getSymbol() + " has been captured.");
+                    if (turn == PieceColor.WHITE) {
+                        whiteCapturedPieces.add(destPiece.getSymbol());
+                    }
+                    else {
+                        blackCapturedPieces.add(destPiece.getSymbol());
+                    }
+
+                }
+                board.board[dest[0]][dest[1]].setPiece(piece);
+                board.board[source[0]][source[1]].setPiece(new EmptyPiece(' ', PieceColor.EMPTY));
+                if (isCheck(turn)) {
+                    System.out.println("Move places " + turn + " in check!");
+                    board.board[source[0]][source[1]].setPiece(piece);
+                    board.board[dest[0]][dest[1]].setPiece(destPiece);
+                    return false;
+                }
+                switchTurn();
+                return true;
             }
             else {
-                System.out.println("Invalid Move. It is not your turn to move.");
+                System.out.println("Illegal move!");
             }
         }
-        System.out.println();
-        board.printBoard();
+        else {
+            System.out.println("No piece at source or not your turn!");
+        }
+        return false;
+    }
+    public void play() {
+        while (true) {
+            board.printBoard();
+            if (isCheckMate(turn)) {
+                System.out.println("Checkmate! " + turn + " loses.");
+                break;
+            }
+            if (isCheck(turn)) {
+                System.out.println(turn + " is in check!");
+            }
+            System.out.println(turn + "'s move");
+            System.out.println("White Captured Pieces: " + whiteCapturedPieces.toString());
+            System.out.println("Black Captured Pieces: " + blackCapturedPieces.toString());
+            System.out.print("Enter source and destination (e.g., 'e2,e4'): ");
+            String[] input = scanner.nextLine().trim().split(",");
+            if (input.length != 2) {
+                System.out.println("Invalid input. Try again.");
+                continue;
+            }
+            int[] source = parsePosition(input[0]);
+            int[] dest = parsePosition(input[1]);
+            if (source == null || dest == null) {
+                System.out.println("Invalid positions. Try again.");
+                continue;
+            }
+            move(source, dest);
+        }
+        scanner.close();
+    }
+    private int[] parsePosition(String pos) {
+        if (pos.length() != 2) {
+            return null;
+        }
+        int x = pos.charAt(0) - 'a';
+        int y = 8 - (pos.charAt(1) - '0');
+        if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+            return null;
+        }
+        return new int[]{y, x};
     }
     public static void main(String[] args) {
-        board = new Board();
-        board.initializeBoard();
-        board.printBoard();
-
-        while (!board.gameOver) {
-            String currentPlayer = isWhite ? "White" : "Black";
-            System.out.println("\n" + currentPlayer + " Player's Turn");
-            getInput();
-            System.out.println();
-        }
+        Game game = new Game();
+        game.play();
     }
 }
