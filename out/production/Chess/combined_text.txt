@@ -1,0 +1,454 @@
+// Contents of Knight.java
+public class Knight extends Piece{
+    public Knight(char symbol, PieceColor color) {
+        super(symbol, color);
+    }
+    @Override
+    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+        if (((Math.abs(x2-x1) == 2 && Math.abs(y2-y1) == 1) || (Math.abs(y2-y1) == 2 && Math.abs(x2-x1) == 1)) && (! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor())) { //Checks that knight is moving correctly and checking if final coordinates are empty or has a piece and color is opposite
+            return true;
+        }
+        //
+        return false;
+    }
+}
+
+// Contents of Rules.java
+public class Rules {
+//    Chess Project V1:
+
+//    You need to review the rules and movements of each chess piece: Pawns, Rooks, Knights, Bishops, Queens, and Kings then try to write Piece Classes this week for your Homework, We will discuss more about it in the session before we continue binary trees.
+
+//    Project Details: The Java Chess Game project embarks on the timeless game of chess, crafting a fully functional console-based application. In this initial phase, our focus is on establishing a solid foundation, allowing a player to engage with an intelligent computer opponent within the terminal.
+//    The primary goal for the first version is to implement a console-based chess game in Java that supports interactive play between a human user and the computer. This version will serve as the core upon which subsequent features and interfaces will be built.
+
+//    Functional Requirements:
+
+//    Accurate representation of chess rules for piece movements, including special moves like castling and en passant.
+//    A console interface that displays the chessboard and captures user input for moves.
+//    Implementation of a simple AI for the computer opponent capable of responding to player moves.
+//    A move log system that records each move in a text file, providing a game history that can be reviewed.
+//    Chess Pieces:
+//    The queen can move horizontally, vertically, and diagonally across the board.
+//    A rook can move horizontally and vertically across the board.
+//    A bishop can move diagonally across the board.
+//    A knight can jump to eight different squares which are two steps forward plus one step sideways from its current position.
+//    The king can move in any direction, but only one step at a time. Also, the king must never move into check. There is also a special "castling" move for the king.
+//    A pawn can move only forward towards the end of the board, but captures sideways. From its initial position, a pawn may make two steps, otherwise only a single step at a time. If the pawn reaches the end of the board, it is automatically promoted to another piece (usually a queen). There is also a special "en passant" move for the pawn.
+//    Special Moves
+//    "Castling" is a special move in the game of chess involving the king and either of the original rooks of the same color. It is the only move in chess (except promotion) in which a player moves two pieces at the same time. Castling consists of moving the king two squares towards a rook on the player’s first rank (row), then moving the rook onto the square over which the king crossed. Castling can only be done if the king has never moved, the rook involved has never moved, the squares between the king and the rook involved are not occupied, the king is not in check, and the king does not cross over or end on a square in which it would be in check.
+//    "En passant" is a special pawn capture which can occur immediately after a player moves a pawn two squares forward from its starting position, and an enemy pawn could have captured it had the same pawn moved only one square forward. The opponent captures the just-moved pawn as if taking it "as it passes" through the first square. The resulting position is the same as if the pawn had moved only one square forward and the enemy pawn had captured normally.
+//    The en passant capture must be done on the very next turn, or the right to do so is lost. Such a move is the only occasion in chess in which a piece captures but does not move to the square of the captured piece. If an en passant capture is the only legal move available, it must be made.
+//    The chess game ends as soon as one king is trapped in "checkmate". That is, there is no move for the player possible which would get his king out of check. Then the player loses.
+
+//    Program Specification
+
+//    In this project, we want a software program to be built, where a human player can interactively play chess against the computer. The human user chooses a color (white or black) and the computer plays the opponent.
+//    Basic functions that are required:
+
+//    1. The game follows the official rules of chess. The program shows a game interface where the player can see the game board and make moves.
+//    2. The program supports an interactive player (human user) and an automatic player (computer).
+//    3. The human user chooses the side to play (white or black).
+//    4. The program keeps a human-readable log of all the moves (in a text file).
+//    5. The computer player makes its moves in reasonable time (less than 1 minute per move).
+}
+
+
+// Contents of PieceColor.java
+public enum PieceColor {
+    BLACK, WHITE, EMPTY
+}
+
+// Contents of Rook.java
+public class Rook extends Piece {
+    public Rook(char symbol, PieceColor color) {
+        super(symbol, color);
+    }
+    @Override
+    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+
+        if (x1 != x2 && y1 != y2) { //Ensuring if rook is moving in straight line
+            return false;
+        }
+        int diff_x = Integer.signum(x2-x1); //signum, checks if difference between coordinates is positive (returns 1), negative (returns -1), or returns 0
+        int diff_y = Integer.signum(y2 - y1);//""
+
+        int x = x1 + diff_x; //Coordinates of the next square
+        int y = y1 + diff_y; //""
+
+        while (x != x2 || y != y2) { //Path Clearance Loop
+            System.out.println(x + " " + y);
+            if (board.board[y][x].hasPiece()) { //Ensuring current square is empty
+                return false;
+            }
+            x += diff_x;
+            y += diff_y;
+        }
+
+        if (! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor()) { //No piece on destination square, rook can move, OR, if piece is of opponent color, then can capture (returns true)
+            return true;
+        }
+//
+        return false;
+    }
+}
+
+// Contents of Bishop.java
+public class Bishop extends Piece{
+    public Bishop(char symbol, PieceColor color) {
+        super(symbol, color);
+    }
+    @Override
+    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+        if (Math.abs(x2-x1) != Math.abs(y2-y1)) { //Checking if different between x and y coordinates are equal
+            return false;
+        }
+
+        int diff_x = Integer.signum(x2-x1); //signum, checks if difference between coordinates is positive (returns 1), negative (returns -1), or returns 0
+        int diff_y = Integer.signum(y2 - y1);//""
+
+        int x = x1 + diff_x; //Coordinates of the next square
+        int y = y1 + diff_y; //""
+
+        while (x != x2 || y != y2) { //Path Clearance Loop
+            System.out.println(x + " " + y);
+            if (board.board[y][x].hasPiece()) { //Ensuring current square is empty
+                return false;
+            }
+            x += diff_x;
+            y += diff_y;
+        }
+
+        if (! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor()) { //No piece on destination square, bishop can move, OR, if piece is of opponent color, then can capture (returns true)
+            return true;
+        }
+//
+        return false;
+    }
+}
+
+// Contents of Queen.java
+public class Queen extends Piece{
+    public Queen(char symbol, PieceColor color) {
+        super(symbol, color);
+    }
+    @Override
+    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+
+        if ((x1 != x2 && y1 != y2) && (Math.abs(x2-x1) != Math.abs(y2-y1))) { //Ensuring if queen is moving in right direction
+            return false;
+        }
+        int diff_x = Integer.signum(x2-x1); //signum, checks if difference between coordinates is positive (returns 1), negative (returns -1), or returns 0
+        int diff_y = Integer.signum(y2 - y1);//""
+
+        int x = x1 + diff_x; //Coordinates of the next square
+        int y = y1 + diff_y; //""
+
+        while (x != x2 || y != y2) { //Path Clearance Loop//
+            System.out.println(x + " " + y);
+            if (board.board[y][x].hasPiece()) { //Ensuring current square is empty
+                return false;
+            }
+            x += diff_x;
+            y += diff_y;
+        }
+
+        if (! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor()) { //No piece on destination square, queen can move, OR, if piece is of opponent color, then can capture (returns true)
+            return true;
+        }
+
+        return false;
+    }
+}
+
+// Contents of King.java
+public class King extends Piece{
+    int x;
+    int y;
+    public King(char symbol, PieceColor color, int x, int y) {
+        super(symbol, color);
+        this.x = x;
+        this.y = y;
+    }
+    @Override
+    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+        if (((Math.abs(x2-x1) == 1 && y2-y1 == 0) || (Math.abs(y2-y1) == 1 && x2-x1 == 0) || (Math.abs(x2-x1) == 1 && Math.abs(y2-y1) == 1)) && ((! board.board[y2][x2].hasPiece() || board.board[y2][x2].getPiece().getColor() != this.getColor()))) { //Checks horizontal, vertical, and diagonal move for only 1 square and if final coordinates are empty or has a piece of different color
+            return true;
+        }
+//
+        return false;
+    }
+    public String toString() {
+        return getColor().toString() + " " + getSymbol();
+    }
+}
+
+// Contents of Game.java
+import java.util.Scanner;
+public class Game {
+    private static Board board;
+    private static boolean isWhite = true;
+    public static void move(int x1, int y1, int x2, int y2) {
+        if (board.movePiece(x1, y1, x2, y2)) {
+            System.out.println("Move is successful");
+            isCheck();
+            switchPlayer();
+        }
+        else {
+            System.out.println("Invalid move.");
+        }
+    }
+    public static void switchPlayer() {
+        isWhite = isWhite ? false : true;
+    }
+    public static King getKing() {
+        PieceColor currentPlayer = isWhite ? PieceColor.BLACK : PieceColor.WHITE;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.board[i][j].getPiece().getColor() == currentPlayer && board.board[i][j].getPiece() instanceof King) {
+                    return (King) board.board[i][j].getPiece();
+                }
+            }
+        }
+        return null;
+    }
+    public static boolean isCheck() {
+        King opponentKing = getKing();
+        System.out.println(opponentKing.toString());
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.board[i][j].hasPiece() && (board.board[i][j].getPiece().getColor() != opponentKing.getColor())) {
+                    Piece piece = board.board[i][j].getPiece();
+                    System.out.println(piece.toString());
+                    if (piece.isValidMove(i, j, opponentKing.x, opponentKing.y, board)) {
+                        System.out.println(piece);
+                        System.out.println(opponentKing.getColor().toString() + " " + "King is in check.");
+                        System.out.println("X " + i + " Y" + j);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public static void getInput() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the starting coordinates and destination coordinates in algebraic notation (a2,a4): ");
+        String coordinates = sc.next();
+        char startCoordinatesColumn = coordinates.charAt(0);
+        char startCoordinatesRow = coordinates.charAt(1);
+        char endCoordinatesColumn = coordinates.charAt(3);
+        char endCoordinatesRow = coordinates.charAt(4);
+        int x1 = 0;
+        x1 = ((int) startCoordinatesColumn) - 97;
+        int y1 = 0;
+        y1 = Math.abs(8 - (Character.getNumericValue(startCoordinatesRow)));
+
+        int x2 = 0;
+        x2 = ((int) endCoordinatesColumn) - 97;
+        int y2 = 0;
+        y2 = Math.abs(8 - (Character.getNumericValue(endCoordinatesRow)));
+
+        if ((isWhite && board.board[y1][x1].getPiece().getColor() == PieceColor.WHITE) || (!isWhite && board.board[y1][x1].getPiece().getColor() == PieceColor.BLACK)) {
+            move(x1, y1, x2, y2);
+        }
+        else {
+            System.out.println("Invalid Move. It is not your turn to move.");
+        }
+        board.printBoard();
+    }
+    public static void main(String[] args) {
+        board = new Board();
+        board.initializeBoard();
+        board.printBoard();
+
+        while (!board.gameOver) {
+            String currentPlayer = isWhite ? "White" : "Black";
+            System.out.println("\n" + currentPlayer + " Player Turn");
+            getInput();
+            System.out.println("\n");
+        }
+    }
+}
+
+//Update King Move Differnetly, X Y attributes should be updated
+
+// Contents of Board.java
+public class Board {
+     Square board[][];
+     boolean gameOver;
+    public Board() {
+        this.board = new Square[8][8];
+        this.gameOver = false;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = new Square(new EmptyPiece(' ', PieceColor.EMPTY));
+            }
+        }
+    }
+    public void initializeBoard() {
+        board[0][0].setPiece(new Rook('\u2656', PieceColor.BLACK));
+        board[0][7].setPiece(new Rook('\u2656', PieceColor.BLACK));
+        board[0][1].setPiece(new Knight('\u2658', PieceColor.BLACK));
+        board[0][6].setPiece(new Knight('\u2658', PieceColor.BLACK));
+        board[0][2].setPiece(new Bishop('\u2657', PieceColor.BLACK));
+        board[0][5].setPiece(new Bishop('\u2657', PieceColor.BLACK));
+        board[0][3].setPiece(new Queen('\u2655', PieceColor.BLACK));
+        board[0][4].setPiece(new King('\u2654', PieceColor.BLACK, 0, 4));
+        board[7][0].setPiece(new Rook('\u265C', PieceColor.WHITE));
+        board[7][7].setPiece(new Rook('\u265C', PieceColor.WHITE));
+        board[7][1].setPiece(new Knight('\u265E', PieceColor.WHITE));
+        board[7][6].setPiece(new Knight('\u265E', PieceColor.WHITE));
+        board[7][2].setPiece(new Bishop('\u265D', PieceColor.WHITE));
+        board[7][5].setPiece(new Bishop('\u265D', PieceColor.WHITE));
+        board[7][3].setPiece(new Queen('\u265B', PieceColor.WHITE));
+        board[7][4].setPiece(new King('\u265A', PieceColor.WHITE, 7, 4));
+        board[1][0].setPiece(new Pawn('\u2659', PieceColor.BLACK));//
+        board[1][1].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][2].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][3].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][4].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][5].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][6].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[1][7].setPiece(new Pawn('\u2659', PieceColor.BLACK));
+        board[6][0].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][1].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][2].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][3].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][4].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][5].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][6].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+        board[6][7].setPiece(new Pawn('\u265F', PieceColor.WHITE));
+    }
+    public boolean movePiece(int x1, int y1, int x2, int y2) {
+        while (gameOver == false) {
+            System.out.println("Attempting to move piece from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ")");
+            Piece piece = board[y1][x1].getPiece();
+            if (piece == null || piece instanceof EmptyPiece) {
+                System.out.println("No piece at the starting position (" + x1 + ", " + y1 + ")");
+                return false;
+            }
+            System.out.println("Found piece: " + piece.getClass().getSimpleName());
+            if (piece.isValidMove(x1, y1, x2, y2, this)) {
+                // Move the piece
+                board[y2][x2].setPiece(piece);
+                board[y1][x1].setPiece(new EmptyPiece(' ', PieceColor.EMPTY));
+                System.out.println("Move successful");
+                return true;
+            } else {
+                System.out.println("Invalid move for piece " + piece.getClass().getSimpleName() + " from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ")");
+            }
+            return false;
+        }
+        return false;
+    }
+    public void printBoard() {
+        String border = "  +-----+-------+-------+-------+-------+-------+-------+-------+";
+        for (int i = 0; i < 8; i++) {
+            System.out.println(border);
+            System.out.print(8-i + " ");
+            for (int j = 0; j < 8; j++) {
+                if (i == 0 || i == 1 || i == 6 || i == 7) {
+                    System.out.print("|\t" + board[i][j].getPiece().getSymbol() + "\t");
+                }
+                else {
+                    System.out.print("|\t" + board[i][j].getPiece().getSymbol() + "\t");
+                }
+            }
+            System.out.println("|");
+        }
+        System.out.println(border);
+        System.out.println("     a       b       c       d        e       f       g       h");
+    }
+}
+
+// Contents of Piece.java
+public abstract class Piece{
+    private char symbol;
+    private PieceColor color;
+    public Piece(char symbol, PieceColor color) {
+        this.symbol = symbol;
+        this.color = color;
+    }
+    public char getSymbol() {
+        return symbol;//
+    }
+    public void setSymbol(char s) {
+        symbol = s;
+    }
+    public PieceColor getColor() {
+        return color;
+    }
+    public abstract boolean isValidMove(int x1, int y1, int x2, int y2, Board board);
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+}
+
+// Contents of Pawn.java
+public class Pawn extends Piece {
+    public Pawn(char symbol, PieceColor color) {
+        super(symbol, color);
+    }
+    @Override
+    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+        int direction = getColor() == PieceColor.WHITE ? -1 : 1;
+        int startRow = getColor() == PieceColor.WHITE ? 6 : 1;
+
+        if (x1 == x2 && y2 == y1 + direction && ! board.board[y2][x2].hasPiece()) {
+            return true;
+        }
+
+        if (x1 == x2 && y1 == startRow && y2 == y1 + 2 * direction && ! board.board[y2][x2].hasPiece() && !board.board[y1 + direction][x2].hasPiece()) {
+            return true;
+        }
+
+        if (Math.abs(x2 - x1) == 1 && y2 == y1 + direction && board.board[y2][x2].hasPiece() && board.board[y2][x2].getPiece().getColor() != getColor()) {
+            return true;
+        }
+//
+        return false;
+    }
+}
+
+
+// Contents of Square.java
+public class Square {
+    private boolean hasPiece;
+    int x;
+    int y;
+    private Piece piece;
+    public Square(Piece piece) {
+        this.piece = piece;
+    }
+
+    public Piece getPiece() {
+        return piece;//
+    }
+    public void setPiece(Piece p) {
+        piece = p;
+    }
+    public void removePiece() {
+        hasPiece = false;
+    }
+    public boolean hasPiece() {
+        if( !(piece instanceof EmptyPiece)){
+            return true;
+        }
+        return false;
+    }
+}
+
+// Contents of EmptyPiece.java
+public class EmptyPiece extends Piece{
+    public EmptyPiece(char symbol, PieceColor color) {
+        super(symbol, color);
+    }
+    public boolean isValidMove(int x1, int y1, int x2, int y2, Board board) {
+        return false;
+    }
+}
+
+
