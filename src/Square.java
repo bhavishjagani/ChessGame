@@ -10,9 +10,6 @@ public class Square {
         piece = p;
     }
     public boolean hasPiece() {
-        if ( !(piece instanceof EmptyPiece)){
-            return true;
-        }
-        return false;
+        return !(piece instanceof EmptyPiece);
     }
 }

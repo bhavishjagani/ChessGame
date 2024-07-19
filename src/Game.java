@@ -1,20 +1,25 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 public class Game {
-    private Board board;
+    private final Board board;
     private PieceColor turn;
-    private Scanner scanner;
-    private List <Character> whiteCapturedPieces;
-    private List <Character> blackCapturedPieces;
-
+    private final Scanner scanner;
+    private final List <Character> whiteCapturedPieces;
+    private final List <Character> blackCapturedPieces;
+    private final BoardLog boardLog;
+    private ChessTimer timer;
     public Game() {
         board = new Board();
+        turn = PieceColor.WHITE;
+        boardLog = new BoardLog();
+        boardLog.writeLog();
         board.initializeBoard();
         scanner = new Scanner(System.in);
-        turn = PieceColor.WHITE;
         whiteCapturedPieces = new ArrayList<>();
         blackCapturedPieces = new ArrayList<>();
+        timer = new ChessTimer(15);
     }
     private void switchTurn() {
         turn = (turn == PieceColor.WHITE) ? PieceColor.BLACK : PieceColor.WHITE;
@@ -76,7 +81,7 @@ public class Game {
         }
         return null;
     }
-    private boolean move(int[] source, int[] dest) {
+    private void move(int[] source, int[] dest, String move) {
         Piece piece = board.board[source[0]][source[1]].getPiece();
         if (piece != null && piece.getColor() == turn) {
             if (piece.isValidMove(source[0], source[1], dest[0], dest[1], board)) {
@@ -97,10 +102,10 @@ public class Game {
                     System.out.println("Move places " + turn + " in check!");
                     board.board[source[0]][source[1]].setPiece(piece);
                     board.board[dest[0]][dest[1]].setPiece(destPiece);
-                    return false;
                 }
+                boardLog.addLog(move, turn);
+                boardLog.writeLog();
                 switchTurn();
-                return true;
             }
             else {
                 System.out.println("Illegal move!");
@@ -109,7 +114,6 @@ public class Game {
         else {
             System.out.println("No piece at source or not your turn!");
         }
-        return false;
     }
     public void play() {
         while (true) {
@@ -121,11 +125,22 @@ public class Game {
             if (isCheck(turn)) {
                 System.out.println(turn + " is in check!");
             }
+            System.out.println();
             System.out.println(turn + "'s move");
+            System.out.println();
             System.out.println("White Captured Pieces: " + whiteCapturedPieces.toString());
             System.out.println("Black Captured Pieces: " + blackCapturedPieces.toString());
+            System.out.println();
+            timer.startTimer(turn);
+            timer.printTime();
+            System.out.println();
+            System.out.println("Board Log: ");
+            System.out.println();
+            boardLog.printLog();
+            System.out.println();
             System.out.print("Enter source and destination (e.g., 'e2,e4'): ");
             String[] input = scanner.nextLine().trim().split(",");
+            String move = Arrays.toString(input);
             if (input.length != 2) {
                 System.out.println("Invalid input. Try again.");
                 continue;
@@ -136,7 +151,7 @@ public class Game {
                 System.out.println("Invalid positions. Try again.");
                 continue;
             }
-            move(source, dest);
+            move(source, dest, move);
         }
         scanner.close();
     }
@@ -156,3 +171,5 @@ public class Game {
         game.play();
     }
 }
+
+//Add Timer, 15 min total for each game

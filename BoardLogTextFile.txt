@@ -1,0 +1,2 @@
+1. WHITE: e2, e4
+   BLACK: e7, e5
