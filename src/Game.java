@@ -9,7 +9,7 @@ public class Game {
     private final List <Character> whiteCapturedPieces;
     private final List <Character> blackCapturedPieces;
     private final BoardLog boardLog;
-    private ChessTimer timer;
+    private final ChessTimer timer;
     public Game() {
         board = new Board();
         turn = PieceColor.WHITE;
@@ -23,6 +23,7 @@ public class Game {
     }
     private void switchTurn() {
         turn = (turn == PieceColor.WHITE) ? PieceColor.BLACK : PieceColor.WHITE;
+        timer.switchTurn(turn);
     }
     private boolean isCheck(PieceColor color) {
         int[] kingPos = findKing(color);
@@ -131,7 +132,10 @@ public class Game {
             System.out.println("White Captured Pieces: " + whiteCapturedPieces.toString());
             System.out.println("Black Captured Pieces: " + blackCapturedPieces.toString());
             System.out.println();
-            timer.startTimer(turn);
+            timer.startTimer(turn, () -> {
+                switchTurn();
+                System.out.println(turn + " Player Won.");
+            });
             timer.printTime();
             System.out.println();
             System.out.println("Board Log: ");
