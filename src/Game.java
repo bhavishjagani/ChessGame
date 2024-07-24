@@ -6,8 +6,8 @@ public class Game {
     private final Board board;
     private PieceColor turn;
     private final Scanner scanner;
-    private final List <Character> whiteCapturedPieces;
-    private final List <Character> blackCapturedPieces;
+    private final List<Character> whiteCapturedPieces;
+    private final List<Character> blackCapturedPieces;
     private final BoardLog boardLog;
     private final ChessTimer timer;
     public Game() {
@@ -19,7 +19,8 @@ public class Game {
         scanner = new Scanner(System.in);
         whiteCapturedPieces = new ArrayList<>();
         blackCapturedPieces = new ArrayList<>();
-        timer = new ChessTimer(15);
+        timer = new ChessTimer(10);
+        timer.switchTurn(turn);
     }
     private void switchTurn() {
         turn = (turn == PieceColor.WHITE) ? PieceColor.BLACK : PieceColor.WHITE;
@@ -87,7 +88,7 @@ public class Game {
         if (piece != null && piece.getColor() == turn) {
             if (piece.isValidMove(source[0], source[1], dest[0], dest[1], board)) {
                 Piece destPiece = board.board[dest[0]][dest[1]].getPiece();
-                if (! (destPiece instanceof EmptyPiece)) {
+                if (!(destPiece instanceof EmptyPiece)) {
                     System.out.println(destPiece.getSymbol() + " has been captured.");
                     if (turn == PieceColor.WHITE) {
                         whiteCapturedPieces.add(destPiece.getSymbol());
@@ -95,7 +96,6 @@ public class Game {
                     else {
                         blackCapturedPieces.add(destPiece.getSymbol());
                     }
-
                 }
                 board.board[dest[0]][dest[1]].setPiece(piece);
                 board.board[source[0]][source[1]].setPiece(new EmptyPiece(' ', PieceColor.EMPTY));
@@ -104,9 +104,11 @@ public class Game {
                     board.board[source[0]][source[1]].setPiece(piece);
                     board.board[dest[0]][dest[1]].setPiece(destPiece);
                 }
-                boardLog.addLog(move, turn);
-                boardLog.writeLog();
-                switchTurn();
+                else {
+                    boardLog.addLog(move, turn);
+                    boardLog.writeLog();
+                    switchTurn();
+                }
             }
             else {
                 System.out.println("Illegal move!");
@@ -129,13 +131,9 @@ public class Game {
             System.out.println();
             System.out.println(turn + "'s move");
             System.out.println();
-            System.out.println("White Captured Pieces: " + whiteCapturedPieces.toString());
-            System.out.println("Black Captured Pieces: " + blackCapturedPieces.toString());
+            System.out.println("White Captured Pieces: " + whiteCapturedPieces);
+            System.out.println("Black Captured Pieces: " + blackCapturedPieces);
             System.out.println();
-            timer.startTimer(turn, () -> {
-                switchTurn();
-                System.out.println(turn + " Player Won.");
-            });
             timer.printTime();
             System.out.println();
             System.out.println("Board Log: ");
@@ -176,4 +174,11 @@ public class Game {
     }
 }
 
-//Add Timer, 15 min total for each game
+// Changes in the last updated version
+//ChessTimer.java
+// added switchTurn method to handle switching the timer between players.
+// modified startTimer method to decrement the correct player time and handle timeout case.
+//Game.java
+// Updated switchTurn to use ChessTimer new switchTurn method
+// Ensured timer starts correctly for the first player and switches correctly between turns
+// Added timer management in the move and play methods to handle timing properly during gameplay

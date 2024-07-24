@@ -1,4 +1,1 @@
 1. WHITE: e2, e4
-   BLACK: e7, e5
-2. WHITE: a2, a4
-   BLACK: a7, a5
