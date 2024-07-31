@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 public class BoardLog {
-    private List<String> logs;
+    private final List<String> logs;
     static int step;
     public BoardLog() {
         logs = new ArrayList<>();

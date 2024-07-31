@@ -1,5 +1,5 @@
 public class Board {
-     Square board[][];
+     Square[][] board;
      boolean gameOver;
     public Board() {
         this.board = new Square[8][8];
@@ -44,20 +44,6 @@ public class Board {
         board[6][6].setPiece(new Pawn('♟', PieceColor.WHITE));
         board[6][7].setPiece(new Pawn('♟', PieceColor.WHITE));
     }
-    public boolean movePiece(int x1, int y1, int x2, int y2) {
-        while (! gameOver) {
-            Piece piece = board[y1][x1].getPiece();
-            if (piece.isValidMove(y1, x1, y2, x2, this)) {
-                // Move the piece
-                board[y2][x2].setPiece(piece);
-                board[y1][x1].setPiece(new EmptyPiece(' ', PieceColor.EMPTY));
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
     public void printBoard() {
         String border = "  +-----+-------+-------+-------+-------+-------+-------+-------+";
         for (int i = 0; i < 8; i++) {

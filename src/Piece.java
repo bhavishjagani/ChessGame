@@ -1,15 +1,12 @@
 public abstract class Piece{
-    private char symbol;
-    private PieceColor color;
+    private final char symbol;
+    private final PieceColor color;
     public Piece(char symbol, PieceColor color) {
         this.symbol = symbol;
         this.color = color;
     }
     public char getSymbol() {
         return symbol;//
-    }
-    public void setSymbol(char s) {
-        symbol = s;
     }
     public PieceColor getColor() {
         return color;

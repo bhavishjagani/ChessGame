@@ -3,7 +3,7 @@ import java.util.TimerTask;
 public class ChessTimer {
     private int whitePlayerTime;
     private int blackPlayerTime;
-    private Timer timer;
+    private final Timer timer;
     private PieceColor currentTurn;
     private TimerTask timerTask;
     public ChessTimer(int totalMinutes) {
@@ -27,14 +27,16 @@ public class ChessTimer {
                     whitePlayerTime--;
                     if (whitePlayerTime <= 0) {
                         timer.cancel();
-                        System.out.println("White Player's time is up! Black wins!");
+                        System.out.println("\n\nWhite Player's time is up! Black wins!");
+                        System.exit(0);
                     }
                 }
                 else {
                     blackPlayerTime--;
                     if (blackPlayerTime <= 0) {
                         timer.cancel();
-                        System.out.println("Black Player's time is up! White wins!");
+                        System.out.println("\n\nBlack Player's time is up! White wins!");
+                        System.exit(0);
                     }
                 }
             }
