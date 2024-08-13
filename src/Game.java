@@ -175,17 +175,65 @@ public class Game {
                     ((Rook) piece).setMoved(true);
                 }
                 //Checks if piece is Rook/King, White/Black, and if they haven't castled and are trying to move, then set "hasMoved" as true, canCastle will then return false
+                if (piece instanceof Pawn && (dest[0] == 7 || dest[0] == 0)) {
+                    System.out.println("You can now promote. Enter an input of one of the pieces you can promote to: Q (Queen), R (Rook), K (Knight), B (Bishop): ");
+                    String input = scanner.next();
+                    if (input.equals("Q")) {
+                        char symbol;
+                        if (turn == PieceColor.WHITE) {
+                            symbol = '♛';
+                        }
+                        else {
+                            symbol = '♕';
+                        }
+                        board.board[dest[0]][dest[1]].setPiece(new Queen(symbol, turn));
+                    }
+                    if (input.equals("R")) {
+                        char symbol;
+                        if (turn == PieceColor.WHITE) {
+                            symbol = '♜';
+                        }
+                        else {
+                            symbol = '♖';
+                        }
+                        board.board[dest[0]][dest[1]].setPiece(new Rook(symbol, turn));
+                    }
+                    if (input.equals("K")) {
+                        char symbol;
+                        if (turn == PieceColor.WHITE) {
+                            symbol = '♞';
+                        }
+                        else {
+                            symbol = '♘';
+                        }
+                        board.board[dest[0]][dest[1]].setPiece(new Knight(symbol, turn));
+                    }
+                    if (input.equals("B")) {
+                        char symbol;
+                        if (turn == PieceColor.WHITE) {
+                            symbol = '♝';
+                        }
+                        else {
+                            symbol = '♗';
+                        }
+                        board.board[dest[0]][dest[1]].setPiece(new Bishop(symbol, turn));
+                    }
+                }
                 Piece destPiece = board.board[dest[0]][dest[1]].getPiece();
                 if (!(destPiece instanceof EmptyPiece)) {
                     System.out.println(destPiece.getSymbol() + " has been captured.");
-                    if (turn == PieceColor.WHITE) {
-                        whiteCapturedPieces.add(destPiece.getSymbol());
-                    }
-                    else {
-                        blackCapturedPieces.add(destPiece.getSymbol());
+                    if (!((destPiece instanceof Queen || destPiece instanceof Rook || destPiece instanceof Knight || destPiece instanceof Bishop) && (dest[0] == 7 || dest[0] == 0) && (piece instanceof Pawn))) {
+                        if ((turn == PieceColor.WHITE)) {
+                            whiteCapturedPieces.add(destPiece.getSymbol());
+                        }
+                        else {
+                            blackCapturedPieces.add(destPiece.getSymbol());
+                        }
                     }
                 }
-                board.board[dest[0]][dest[1]].setPiece(piece);
+                if (!(piece instanceof Pawn && (dest[0] == 7 || dest[0] == 0))) {
+                    board.board[dest[0]][dest[1]].setPiece(piece);
+                }
                 board.board[source[0]][source[1]].setPiece(new EmptyPiece(' ', PieceColor.EMPTY));
                 if (isCheck(turn)) {
                     System.out.println("Move places " + turn + " in check!");
@@ -294,4 +342,4 @@ public class Game {
         game.play();
     }
 }
-//Add a special feature
+//Finish Promotion

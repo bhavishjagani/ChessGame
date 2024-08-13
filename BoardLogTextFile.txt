@@ -1,10 +1,7 @@
 1. WHITE: e2, e4
-   BLACK: e7, e5
-2. WHITE: f1, d3
+   BLACK: h7, h5
+2. WHITE: d1, h5
    BLACK: a7, a6
-3. WHITE: g1, h3
-   BLACK: d8, g5
-4. WHITE: a2, a3
-   BLACK: g5, e3
-5. WHITE: d1, e2
-   BLACK: e3, g5
+3. WHITE: h5, h7
+   BLACK: a6, a5
+4. WHITE: h7, h8
